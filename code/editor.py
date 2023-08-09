@@ -18,6 +18,9 @@ class Editor:
         self.support_line_surf = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
         self.support_line_surf.set_colorkey('green')
         self.support_line_surf.set_alpha(30)
+        
+        #selection
+        self.selection_index = 2
     
     #input
     def event_loop(self):
@@ -27,6 +30,7 @@ class Editor:
                 sys.exit()
             
             self.pan_input(event)
+            self.selection_hotkeys(event)
     
     def pan_input(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and mouse_buttons()[1]:
@@ -43,6 +47,18 @@ class Editor:
         
         if self.pan_active:
             self.origin = Vector(mouse_pos()) - self.pan_offset
+
+    def selection_hotkeys(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                self.selection_index += 1
+            if event.key == pygame.K_LEFT:
+                self.selection_index -= 1
+            if self.selection_index > 18:
+                self.selection_index = 2
+            elif self.selection_index < 2:
+                self.selection_index = 18
+
 
     #draw
     def draw_tile_lines(self):

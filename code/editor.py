@@ -13,6 +13,11 @@ class Editor:
         self.origin = Vector( )
         self.pan_active = False
         self.pan_offset = Vector()
+        
+        #support lines
+        self.support_line_surf = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.support_line_surf.set_colorkey('green')
+        self.support_line_surf.set_alpha(30)
     
     #input
     def event_loop(self):
@@ -32,14 +37,39 @@ class Editor:
             
         if event.type == pygame.MOUSEWHEEL:
             if pygame.key.get_pressed()[pygame.K_LCTRL]:
-                self.origin.y -= event.y * 50
+                self.origin.y -= event.y * TILE_SIZE
             else:
-                self.origin.x -= event.y * 50
+                self.origin.x -= event.y * TILE_SIZE
         
         if self.pan_active:
             self.origin = Vector(mouse_pos()) - self.pan_offset
+
+    #draw
+    def draw_tile_lines(self):
+        cols = WINDOW_WIDTH // TILE_SIZE
+        rows = WINDOW_HEIGHT // TILE_SIZE
+        
+        origin_offset = Vector(
+            x = self.origin.x - int(self.origin.x / TILE_SIZE) * TILE_SIZE,
+            y = self.origin.y - int(self.origin.y / TILE_SIZE) * TILE_SIZE,
+        )
+        
+        self.support_line_surf.fill("green")
+        
+        for col in range(cols + 1):
+            x = origin_offset.x + col * TILE_SIZE
+            pygame.draw.line(self.support_line_surf, LINE_COLOR, (x, 0), (x, WINDOW_HEIGHT))
+        for row in range(rows + 1):
+            y = origin_offset.y + row * TILE_SIZE
+            pygame.draw.line(self.support_line_surf, LINE_COLOR, (0, y), (WINDOW_WIDTH, y))
+        
+        self.display_surface.blit(self.support_line_surf, (0,0))
+
     
     def run(self, dt):
-        self.display_surface.fill("white")
         self.event_loop( )
+        
+        self.display_surface.fill("white")
         pygame.draw.circle(self.display_surface, "red", self.origin, 10)
+        
+        self.draw_tile_lines()

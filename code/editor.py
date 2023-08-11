@@ -66,7 +66,8 @@ class Editor:
 
     def menu_click(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and self.menu.rect.collidepoint(mouse_pos()):
-            self.selection_index = self.menu.click(mouse_pos(), mouse_buttons())
+            index = self.menu.click(mouse_pos(), mouse_buttons())
+            self.selection_index = index if index else self.selection_index
 
     #draw
     def draw_tile_lines(self):
@@ -92,11 +93,12 @@ class Editor:
     def run(self, dt):
         self.event_loop( )
         
-        self.display_surface.fill("white")
+        self.display_surface.fill("grey")
         pygame.draw.circle(self.display_surface, "red", self.origin, 10)
         
         self.draw_tile_lines()
-        self.menu.display(dt)
+        self.menu.display(dt, self.selection_index)
+        print(self.selection_index)
         
 
         

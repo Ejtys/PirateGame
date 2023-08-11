@@ -46,7 +46,7 @@ class Menu:
                     pass
                 if mouse_button[2]: #right button
                     pass
-            return sprite.get_id()
+                return sprite.get_id()
     
     def display(self,dt):
         self.buttons.update(dt)
@@ -63,8 +63,12 @@ class Button(pygame.sprite.Sprite):
         self.index = 0
         self.main_active = True 
         
+    def get_id(self):
+        print(self.items["main" if self.main_active else "alt"])
+        return self.items["main" if self.main_active else "alt"][self.index][0]
+        
     def update(self, dt):
         self.image.fill(BUTTON_BG_COLOR)
-        surface = self.items["main"][self.index][1]
+        surface = self.items["main" if self.main_active else "alt"][self.index][1]
         rect = surface.get_rect(center = (self.rect.width / 2, self.rect.height / 2))
         self.image.blit(surface, rect)

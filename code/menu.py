@@ -15,7 +15,7 @@ class Menu:
                 if not value["menu"] in self.menu_surfaces:
                     self.menu_surfaces[value["menu"]] = [(key, pygame.image.load(value["menu_surf"]))]
                 else:
-                    self.menu_surfaces[value["menu"]].append([(key, pygame.image.load(value["menu_surf"]))])
+                    self.menu_surfaces[value["menu"]].append((key, pygame.image.load(value["menu_surf"])))
         
     def create_buttons(self):
         #menu area
@@ -43,9 +43,9 @@ class Menu:
         for sprite in self.buttons:
             if sprite.rect.collidepoint(mouse_pos):
                 if mouse_button[1]: #middle button
-                    pass
+                    sprite.main_active = not sprite.main_active if sprite.items['alt'] else True
                 if mouse_button[2]: #right button
-                    pass
+                    sprite.switch()
                 return sprite.get_id()
     
     def display(self,dt):
@@ -64,8 +64,11 @@ class Button(pygame.sprite.Sprite):
         self.main_active = True 
         
     def get_id(self):
-        print(self.items["main" if self.main_active else "alt"])
         return self.items["main" if self.main_active else "alt"][self.index][0]
+        
+    def switch(self):
+        self.index += 1
+        self.index = 0 if self.index >= len(self.items["main" if self.main_active else "alt"]) else self.index
         
     def update(self, dt):
         self.image.fill(BUTTON_BG_COLOR)

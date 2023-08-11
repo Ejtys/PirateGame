@@ -26,5 +26,9 @@ class CanvasTile:
     
     def add_id(self, tile_id):
         options = {key: value['style'] for key, value in EDITOR_DATA.items()}
-        print(options)
+        match options[tile_id]:
+            case "terrain": self.has_terrain = True
+            case "water": self.has_water = True
+            case "evemy": self.enemy = tile_id
+            case "coin": self.coin = tile_id
         

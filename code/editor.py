@@ -112,11 +112,22 @@ class Editor:
             pygame.draw.line(self.support_line_surf, LINE_COLOR, (0, y), (WINDOW_WIDTH, y))
         
         self.display_surface.blit(self.support_line_surf, (0,0))
+
+    def draw_level(self):
+        for cell_poss, tile in self.canvas_data.items():
+            pos = self.origin + Vector(cell_poss) * TILE_SIZE
+            
+            if tile.has_terrain:
+                test_surface = pygame.Surface((TILE_SIZE, TILE_SIZE))
+                test_surface.fill("brown")
+                self.display_surface.blit(test_surface, pos)
+        
   
     def run(self, dt):
         self.event_loop( )
         
         self.display_surface.fill("grey")
+        self.draw_level()
         pygame.draw.circle(self.display_surface, "red", self.origin, 10)
         
         self.draw_tile_lines()

@@ -5,10 +5,12 @@ from pygame.mouse import get_pos as mouse_pos
 
 from settings import *
 from menu import Menu
+from canvasTile import CanvasTile
 
 class Editor:
     def __init__(self):
         self.display_surface = pygame.display.get_surface()
+        self.canvas_data = {}
         
         #navigation
         self.origin = Vector( )
@@ -22,16 +24,18 @@ class Editor:
         
         #selection
         self.selection_index = 2
+        self.last_selected_cell = None
         
         #menu
         self.menu = Menu()
-    
+  
+    #support
     def get_current_cell(self):
         x = (Vector(mouse_pos()) - self.origin).x / TILE_SIZE
         y = (Vector(mouse_pos()) - self.origin).y / TILE_SIZE
         x = int(x) - 1 if x < 0 else int(x)
         y = int(y) - 1 if y < 0 else int(y)
-        print((x, y))
+        return x, y
     
     #input
     def event_loop(self):
@@ -79,7 +83,14 @@ class Editor:
 
     def canvas_add(self):
         if mouse_buttons()[0] and not self.menu.rect.collidepoint(mouse_pos()):
-            self.get_current_cell( )
+            current_cell = self.get_current_cell()
+            
+            if current_cell != self.last_selected_cell:
+                if current_cell in self.canvas_data:
+                    pass
+                else:
+                    self.canvas_data[current_cell] = CanvasTile(self.selection_index)
+                self.last_selected_cell = current_cell
 
     #draw
     def draw_tile_lines(self):

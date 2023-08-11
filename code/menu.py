@@ -1,3 +1,4 @@
+from typing import Any
 import pygame
 from settings import *
 
@@ -30,12 +31,17 @@ class Menu:
         self.coin_button_rect = generic_rect.move(self.rect.width/2, 0).inflate(-button_margin, -button_margin)
         self.enemy_button_rect = generic_rect.move(self.rect.width/2, self.rect.height/2).inflate(-button_margin, -button_margin)
         self.palm_button_rect = generic_rect.move(0, self.rect.height/2).inflate(-button_margin, -button_margin)
+        
+        #create buttons
+        self.buttons = pygame.sprite.Group()
+        Button(self.tile_button_rect, self.buttons, self.menu_surfaces["terrain"])
+        Button(self.coin_button_rect, self.buttons, self.menu_surfaces["coin"])
+        Button(self.enemy_button_rect, self.buttons, self.menu_surfaces["enemy"])
+        Button(self.palm_button_rect, self.buttons, self.menu_surfaces["palm fg"], self.menu_surfaces["palm bg"])
     
-    def display(self):
-        pygame.draw.rect(self.display_surface, "black", self.tile_button_rect)
-        pygame.draw.rect(self.display_surface, "yellow", self.coin_button_rect) 
-        pygame.draw.rect(self.display_surface, "red", self.enemy_button_rect) 
-        pygame.draw.rect(self.display_surface, "green", self.palm_button_rect)
+    def display(self,dt):
+        self.buttons.update(dt)
+        self.buttons.draw(self.display_surface)
     
 class Button(pygame.sprite.Sprite):
     def __init__(self, rect, group, items, items_alt = None):
@@ -47,3 +53,9 @@ class Button(pygame.sprite.Sprite):
         self.items = {"main":items, "alt":items_alt}
         self.index = 0
         self.main_active = True 
+        
+    def update(self, dt):
+        self.image.fill(BUTTON_BG_COLOR)
+        surface = self.items["main"][self.index][1]
+        rect = surface.get_rect(center = (self.rect.width / 2, self.rect.height / 2))
+        self.image.blit(surface, rect)

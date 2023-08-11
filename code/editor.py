@@ -4,6 +4,7 @@ from pygame.mouse import get_pressed as mouse_buttons
 from pygame.mouse import get_pos as mouse_pos
 
 from settings import *
+from menu import Menu
 
 class Editor:
     def __init__(self):
@@ -21,6 +22,9 @@ class Editor:
         
         #selection
         self.selection_index = 2
+        
+        #menu
+        self.menu = Menu()
     
     #input
     def event_loop(self):
@@ -89,3 +93,4 @@ class Editor:
         pygame.draw.circle(self.display_surface, "red", self.origin, 10)
         
         self.draw_tile_lines()
+        self.menu.display()

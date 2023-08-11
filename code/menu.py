@@ -39,6 +39,15 @@ class Menu:
         Button(self.enemy_button_rect, self.buttons, self.menu_surfaces["enemy"])
         Button(self.palm_button_rect, self.buttons, self.menu_surfaces["palm fg"], self.menu_surfaces["palm bg"])
     
+    def click(self, mouse_pos, mouse_button):
+        for sprite in self.buttons:
+            if sprite.rect.collidepoint(mouse_pos):
+                if mouse_button[1]: #middle button
+                    pass
+                if mouse_button[2]: #right button
+                    pass
+            return sprite.get_id()
+    
     def display(self,dt):
         self.buttons.update(dt)
         self.buttons.draw(self.display_surface)

@@ -35,6 +35,7 @@ class Editor:
             
             self.pan_input(event)
             self.selection_hotkeys(event)
+            self.menu_click(event)
     
     def pan_input(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and mouse_buttons()[1]:
@@ -63,6 +64,9 @@ class Editor:
             elif self.selection_index < 2:
                 self.selection_index = 18
 
+    def menu_click(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and self.menu.rect.collidepoint(mouse_pos()):
+            self.selection_index = self.menu.click(mouse_pos(), mouse_buttons)
 
     #draw
     def draw_tile_lines(self):
@@ -84,8 +88,7 @@ class Editor:
             pygame.draw.line(self.support_line_surf, LINE_COLOR, (0, y), (WINDOW_WIDTH, y))
         
         self.display_surface.blit(self.support_line_surf, (0,0))
-
-    
+  
     def run(self, dt):
         self.event_loop( )
         

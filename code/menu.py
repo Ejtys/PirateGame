@@ -1,4 +1,5 @@
 import pygame
+from pygame.sprite import _Group
 from settings import *
 
 class Menu:
@@ -25,4 +26,15 @@ class Menu:
         pygame.draw.rect(self.display_surface, "black", self.tile_button_rect)
         pygame.draw.rect(self.display_surface, "yellow", self.coin_button_rect) 
         pygame.draw.rect(self.display_surface, "red", self.enemy_button_rect) 
-        pygame.draw.rect(self.display_surface, "green", self.palm_button_rect)  
+        pygame.draw.rect(self.display_surface, "green", self.palm_button_rect)
+    
+class Button(pygame.sprite.Sprite):
+    def __init__(self, rect, group, items, items_alt = None):
+        super().__init__(group)
+        self.image = pygame.Surface(rect.size)
+        self.rect = rect
+        
+        #items
+        self.items = {"main":items, "alt":items_alt}
+        self.index = 0
+        self.main_active = True 

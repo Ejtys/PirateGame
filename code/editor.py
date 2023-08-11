@@ -87,7 +87,7 @@ class Editor:
             
             if current_cell != self.last_selected_cell:
                 if current_cell in self.canvas_data:
-                    pass
+                    self.canvas_data[current_cell].add_id(self.selection_index)
                 else:
                     self.canvas_data[current_cell] = CanvasTile(self.selection_index)
                 self.last_selected_cell = current_cell

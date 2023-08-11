@@ -1,11 +1,20 @@
 import pygame
-from pygame.sprite import _Group
 from settings import *
 
 class Menu:
     def __init__(self):
         self.display_surface = pygame.display.get_surface()
+        self.create_data()
         self.create_buttons()
+       
+    def create_data(self):
+        self.menu_surfaces = {}
+        for key, value in EDITOR_DATA.items():
+            if value["menu"]:
+                if not value["menu"] in self.menu_surfaces:
+                    self.menu_surfaces[value["menu"]] = [(key, pygame.image.load(value["menu_surf"]))]
+                else:
+                    self.menu_surfaces[value["menu"]].append([(key, pygame.image.load(value["menu_surf"]))])
         
     def create_buttons(self):
         #menu area

@@ -10,7 +10,7 @@ class Main:
         self.clock = pygame.time.Clock()
         self.imports()
         
-        self.editor = Editor()
+        self.editor = Editor(self.land_tile)
         
         #cursor
         surf = pygame.image.load("../graphics/cursors/mouse.png").convert_alpha()

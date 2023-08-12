@@ -8,9 +8,11 @@ from menu import Menu
 from canvasTile import CanvasTile
 
 class Editor:
-    def __init__(self):
+    def __init__(self, land_tiles):
         self.display_surface = pygame.display.get_surface()
         self.canvas_data = {}
+        
+        self.land_tile = land_tiles
         
         #navigation
         self.origin = Vector( )
@@ -36,6 +38,26 @@ class Editor:
         x = int(x) - 1 if x < 0 else int(x)
         y = int(y) - 1 if y < 0 else int(y)
         return x, y
+
+    def check_neighbors(self, cell_pos):
+        
+        #local cluster
+        cluster_size = 3
+        local_cluster = [ 
+                         (cell_pos[0] + col - int(cluster_size/2), cell_pos[1] + row - int(cluster_size/2))
+                         for col in range(cluster_size)
+                         for row in range(cluster_size)
+                         ]
+        
+        for cell in local_cluster:
+            if cell in self.canvas_data:
+                self.canvas_data[cell].terrain_neighbors = []
+                for name, side in NEIGHBOR_DIRECTIONS.items():
+                    neighbor_cell = (cell[0] + side[0], cell[1] + side[1])
+                    if neighbor_cell in self.canvas_data:
+                        if self.canvas_data[neighbor_cell].has_terrain:
+                            self.canvas_data[cell].terrain_neighbors.append(name)
+        
     
     #input
     def event_loop(self):
@@ -90,6 +112,8 @@ class Editor:
                     self.canvas_data[current_cell].add_id(self.selection_index)
                 else:
                     self.canvas_data[current_cell] = CanvasTile(self.selection_index)
+                
+                self.check_neighbors(current_cell)
                 self.last_selected_cell = current_cell
 
     #draw
@@ -118,9 +142,9 @@ class Editor:
             pos = self.origin + Vector(cell_poss) * TILE_SIZE
             
             if tile.has_terrain:
-                test_surface = pygame.Surface((TILE_SIZE, TILE_SIZE))
-                test_surface.fill("green")
-                self.display_surface.blit(test_surface, pos)
+                terrain_string = "".join(tile.terrain_neighbors)
+                terrain_style = terrain_string if terrain_string in self.land_tile else "X"
+                self.display_surface.blit(self.land_tile[terrain_style], pos)
                 
             if tile.has_water:
                 test_surface = pygame.Surface((TILE_SIZE, TILE_SIZE))

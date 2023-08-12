@@ -18,7 +18,7 @@ class Main:
         pygame.mouse.set_cursor(cursor)
         
     def imports(self):
-        self.land_tile = import_folder("../graphics/terrain/land")
+        self.land_tile = import_folder_dict("../graphics/terrain/land")
         
     def run(self):
         while True:

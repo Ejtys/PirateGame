@@ -29,6 +29,6 @@ class CanvasTile:
         match options[tile_id]:
             case "terrain": self.has_terrain = True
             case "water": self.has_water = True
-            case "evemy": self.enemy = tile_id
+            case "enemy": self.enemy = tile_id
             case "coin": self.coin = tile_id
         

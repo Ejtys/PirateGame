@@ -119,7 +119,22 @@ class Editor:
             
             if tile.has_terrain:
                 test_surface = pygame.Surface((TILE_SIZE, TILE_SIZE))
+                test_surface.fill("green")
+                self.display_surface.blit(test_surface, pos)
+                
+            if tile.has_water:
+                test_surface = pygame.Surface((TILE_SIZE, TILE_SIZE))
+                test_surface.fill("blue")
+                self.display_surface.blit(test_surface, pos)
+                
+            if tile.coin:
+                test_surface = pygame.Surface((TILE_SIZE, TILE_SIZE))
                 test_surface.fill("brown")
+                self.display_surface.blit(test_surface, pos)
+                
+            if tile.enemy:
+                test_surface = pygame.Surface((TILE_SIZE, TILE_SIZE))
+                test_surface.fill("red")
                 self.display_surface.blit(test_surface, pos)
         
   

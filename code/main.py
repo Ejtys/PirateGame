@@ -1,12 +1,14 @@
 import pygame
 from settings import *
 from editor import Editor
+from support import *
 
 class Main:
     def __init__(self):
         pygame.init()
         self.display_surface = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         self.clock = pygame.time.Clock()
+        self.imports()
         
         self.editor = Editor()
         
@@ -14,6 +16,9 @@ class Main:
         surf = pygame.image.load("../graphics/cursors/mouse.png").convert_alpha()
         cursor = pygame.cursors.Cursor((0,0 ), surf)
         pygame.mouse.set_cursor(cursor)
+        
+    def imports(self):
+        self.land_tile = import_folder("../graphics/terrain/land")
         
     def run(self):
         while True:

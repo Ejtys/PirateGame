@@ -118,9 +118,15 @@ class Editor:
                 self.origin.y -= event.y * TILE_SIZE
             else:
                 self.origin.x -= event.y * TILE_SIZE
+                
+            for sprite in self.canvas_objects:
+                sprite.pan_pos(self.origin)
         
         if self.pan_active:
             self.origin = Vector(mouse_pos()) - self.pan_offset
+            
+            for sprite in self.canvas_objects:
+                sprite.pan_pos(self.origin)
 
     def selection_hotkeys(self, event):
         if event.type == pygame.KEYDOWN:

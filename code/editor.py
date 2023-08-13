@@ -4,6 +4,7 @@ from pygame.mouse import get_pressed as mouse_buttons
 from pygame.mouse import get_pos as mouse_pos
 
 from settings import *
+from support import *
 from menu import Menu
 from canvasTile import CanvasTile
 
@@ -67,6 +68,17 @@ class Editor:
         
     def imports(self):
         self.water_bottom = pygame.image.load("../graphics/terrain/water/water_bottom.png")
+    
+        #animation
+        self.animations = {}
+        for key, value in EDITOR_DATA.items():
+            if value["graphics"]:
+                graphics = import_folder(value["graphics"])
+                self.animations[key]: {
+                    "frame index": 0,
+                    "frames": graphics,
+                    "length": len(graphics)           
+                }
     
     #input
     def event_loop(self):

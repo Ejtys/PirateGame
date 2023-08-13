@@ -12,7 +12,9 @@ class Editor:
         self.display_surface = pygame.display.get_surface()
         self.canvas_data = {}
         
+        #imports
         self.land_tile = land_tiles
+        self.imports()
         
         #navigation
         self.origin = Vector( )
@@ -52,12 +54,19 @@ class Editor:
         for cell in local_cluster:
             if cell in self.canvas_data:
                 self.canvas_data[cell].terrain_neighbors = []
+                self.canvas_data[cell].water_on_top = False
                 for name, side in NEIGHBOR_DIRECTIONS.items():
                     neighbor_cell = (cell[0] + side[0], cell[1] + side[1])
                     if neighbor_cell in self.canvas_data:
+                        #terrain
                         if self.canvas_data[neighbor_cell].has_terrain:
                             self.canvas_data[cell].terrain_neighbors.append(name)
+                        #water
+                        if self.canvas_data[neighbor_cell].has_water and self.canvas_data[cell].has_water and name == "A":
+                            self.canvas_data[cell].water_on_top = True
         
+    def imports(self):
+        self.water_bottom = pygame.image.load("../graphics/terrain/water/water_bottom.png")
     
     #input
     def event_loop(self):
@@ -141,15 +150,18 @@ class Editor:
         for cell_poss, tile in self.canvas_data.items():
             pos = self.origin + Vector(cell_poss) * TILE_SIZE
             
+            if tile.has_water:
+                if tile.water_on_top:
+                    self.display_surface.blit(self.water_bottom, pos)
+                else:
+                    test_surface = pygame.Surface((TILE_SIZE, TILE_SIZE))
+                    test_surface.fill("blue")
+                    self.display_surface.blit(test_surface, pos)
+            
             if tile.has_terrain:
                 terrain_string = "".join(tile.terrain_neighbors)
                 terrain_style = terrain_string if terrain_string in self.land_tile else "X"
                 self.display_surface.blit(self.land_tile[terrain_style], pos)
-                
-            if tile.has_water:
-                test_surface = pygame.Surface((TILE_SIZE, TILE_SIZE))
-                test_surface.fill("blue")
-                self.display_surface.blit(test_surface, pos)
                 
             if tile.coin:
                 test_surface = pygame.Surface((TILE_SIZE, TILE_SIZE))
@@ -161,7 +173,6 @@ class Editor:
                 test_surface.fill("red")
                 self.display_surface.blit(test_surface, pos)
         
-  
     def run(self, dt):
         self.event_loop( )
         

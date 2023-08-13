@@ -74,7 +74,7 @@ class Editor:
         for key, value in EDITOR_DATA.items():
             if value["graphics"]:
                 graphics = import_folder(value["graphics"])
-                self.animations[key]: {
+                self.animations[key] = {
                     "frame index": 0,
                     "frames": graphics,
                     "length": len(graphics)           
@@ -166,9 +166,8 @@ class Editor:
                 if tile.water_on_top:
                     self.display_surface.blit(self.water_bottom, pos)
                 else:
-                    test_surface = pygame.Surface((TILE_SIZE, TILE_SIZE))
-                    test_surface.fill("blue")
-                    self.display_surface.blit(test_surface, pos)
+                    surface = self.animations[3]["frames"][int(self.animations[3]["frame index"])]
+                    self.display_surface.blit(surface, pos)
             
             if tile.has_terrain:
                 terrain_string = "".join(tile.terrain_neighbors)

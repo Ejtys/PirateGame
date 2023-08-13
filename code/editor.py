@@ -80,6 +80,12 @@ class Editor:
                     "length": len(graphics)           
                 }
     
+    def animation_update(self, dt):
+         for value in self.animations.values():
+             value["frame index"] += ANIMATION_SPEED * dt
+             if value["frame index"] >= value["length"]:
+                 value["frame index"] -= value["length"]
+    
     #input
     def event_loop(self):
         for event in pygame.event.get():
@@ -185,7 +191,9 @@ class Editor:
                 self.display_surface.blit(test_surface, pos)
         
     def run(self, dt):
-        self.event_loop( )
+        self.event_loop()
+        
+        self.animation_update(dt)
         
         self.display_surface.fill("grey")
         self.draw_level()

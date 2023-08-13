@@ -97,6 +97,7 @@ class Editor:
             self.selection_hotkeys(event)
             self.menu_click(event)
             self.canvas_add()
+            self.canvas_remove()
     
     def pan_input(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and mouse_buttons()[1]:
@@ -142,6 +143,18 @@ class Editor:
                 
                 self.check_neighbors(current_cell)
                 self.last_selected_cell = current_cell
+
+    def canvas_remove(self):
+        if mouse_buttons()[2] and not self.menu.rect.collidepoint(mouse_pos()):
+            
+            if self.canvas_data:
+                current_cell = self.get_current_cell()
+                if current_cell in self.canvas_data:
+                    self.canvas_data[current_cell].remove_id(self.selection_index)
+                    if self.canvas_data[current_cell].is_empty:
+                        del self.canvas_data[current_cell]
+                
+                self.check_neighbors(current_cell)
 
     #draw
     def draw_tile_lines(self):

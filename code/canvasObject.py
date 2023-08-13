@@ -1,17 +1,35 @@
 import pygame
 from pygame.math import Vector2 as Vector
+from settings import *
 
 
 class CanvasObject(pygame.sprite.Sprite):
     def __init__(self, pos, frames, tile_id, origin, group):
         super().__init__(group)
         
-        self.image = pygame.Surface((100,200))
-        self.image.fill("red")
+        #animation
+        self.frames = frames
+        self.frame_index = 0
+        
+        self.image = self.frames[self.frame_index]
         self.rect = self.image.get_rect(center = pos)
         
         #movement
         self.distance_to_origin = Vector(self.rect.topleft) - origin
         
+    def animate(self, dt):
+        self.frame_index += ANIMATION_SPEED * dt
+        if self.frame_index >= len(self.frames):
+            self.frame_index -= len(self.frames)
+        
+        self.image = self.frames[int(self.frame_index)]
+        self.rect = self.image.get_rect(midbottom = self.rect.midbottom)
+        
     def pan_pos(self, origin):
         self.rect.topleft = origin + self.distance_to_origin
+        
+    def update(self, dt):
+        self.animate(dt)
+        
+    
+        

@@ -222,6 +222,7 @@ class Editor:
         self.event_loop()
         
         self.animation_update(dt)
+        self.canvas_objects.update(dt)
         
         self.display_surface.fill("grey")
         self.draw_level()

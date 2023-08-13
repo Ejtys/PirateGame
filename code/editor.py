@@ -181,14 +181,14 @@ class Editor:
                 self.display_surface.blit(self.land_tile[terrain_style], pos)
                 
             if tile.coin:
-                test_surface = pygame.Surface((TILE_SIZE, TILE_SIZE))
-                test_surface.fill("brown")
-                self.display_surface.blit(test_surface, pos)
+                surface = self.animations[tile.coin]["frames"][int(self.animations[tile.coin]["frame index"])]
+                rect = surface.get_rect(center = (pos[0] + TILE_SIZE //2, pos[1] + TILE_SIZE // 2))
+                self.display_surface.blit(surface, rect)
                 
             if tile.enemy:
-                test_surface = pygame.Surface((TILE_SIZE, TILE_SIZE))
-                test_surface.fill("red")
-                self.display_surface.blit(test_surface, pos)
+                surface = self.animations[tile.enemy]["frames"][int(self.animations[tile.enemy]["frame index"])]
+                rect = surface.get_rect(midbottom = (pos[0] + TILE_SIZE //2, pos[1] + TILE_SIZE))
+                self.display_surface.blit(surface, rect)
         
     def run(self, dt):
         self.event_loop()

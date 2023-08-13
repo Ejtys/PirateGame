@@ -7,6 +7,7 @@ from settings import *
 from support import *
 from menu import Menu
 from canvasTile import CanvasTile
+from canvasObject import CanvasObject
 
 class Editor:
     def __init__(self, land_tiles):
@@ -33,6 +34,12 @@ class Editor:
         
         #menu
         self.menu = Menu()
+        
+        #objects
+        self.canvas_objects = pygame.sprite.Group()
+        
+        #player
+        CanvasObject((200, WINDOW_HEIGHT/2), self.animations[0]["frames"], 0, self.origin, self.canvas_objects)
   
     #support
     def get_current_cell(self):
@@ -202,6 +209,8 @@ class Editor:
                 surface = self.animations[tile.enemy]["frames"][int(self.animations[tile.enemy]["frame index"])]
                 rect = surface.get_rect(midbottom = (pos[0] + TILE_SIZE //2, pos[1] + TILE_SIZE))
                 self.display_surface.blit(surface, rect)
+        
+        self.canvas_objects.draw(self.display_surface)
         
     def run(self, dt):
         self.event_loop()

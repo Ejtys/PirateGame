@@ -174,13 +174,15 @@ class Editor:
                     self.check_neighbors(current_cell)
                     self.last_selected_cell = current_cell
             else:
-                CanvasObject(
-                    pos=mouse_pos(),
-                    frames=self.animations[self.selection_index]["frames"],
-                    tile_id=self.selection_index,
-                    origin=self.origin,
-                    group=self.canvas_objects
-                )
+                if not self.object_timer.active:
+                    CanvasObject(
+                        pos=mouse_pos(),
+                        frames=self.animations[self.selection_index]["frames"],
+                        tile_id=self.selection_index,
+                        origin=self.origin,
+                        group=self.canvas_objects
+                    )
+                    self.object_timer.activate()
 
     def canvas_remove(self):
         if mouse_buttons()[2] and not self.menu.rect.collidepoint(mouse_pos()):
@@ -259,6 +261,7 @@ class Editor:
         
         self.animation_update(dt)
         self.canvas_objects.update(dt)
+        self.object_timer.update()
         
         self.display_surface.fill("grey")
         self.draw_level()

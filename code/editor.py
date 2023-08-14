@@ -8,6 +8,7 @@ from support import *
 from menu import Menu
 from canvasTile import CanvasTile
 from canvasObject import CanvasObject
+from timer import Timer
 
 class Editor:
     def __init__(self, land_tiles):
@@ -38,6 +39,7 @@ class Editor:
         #objects
         self.canvas_objects = pygame.sprite.Group()
         self.object_drag_active = False
+        self.object_timer = Timer(400)
         
         #player
         CanvasObject((200, WINDOW_HEIGHT/2), self.animations[0]["frames"], 0, self.origin, self.canvas_objects)

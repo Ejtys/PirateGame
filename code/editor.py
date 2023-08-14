@@ -41,6 +41,8 @@ class Editor:
         
         #player
         CanvasObject((200, WINDOW_HEIGHT/2), self.animations[0]["frames"], 0, self.origin, self.canvas_objects)
+        
+        self.sky_handle = CanvasObject()
   
     #support
     def get_current_cell(self):
@@ -75,7 +77,8 @@ class Editor:
                             self.canvas_data[cell].water_on_top = True
         
     def imports(self):
-        self.water_bottom = pygame.image.load("../graphics/terrain/water/water_bottom.png")
+        self.water_bottom = pygame.image.load("../graphics/terrain/water/water_bottom.png").convert_alpha()
+        self.sky_handle_surface = pygame.image.load("../graphics/cursors/handle.png").convert_alpha()
     
         #animation
         self.animations = {}

@@ -6,6 +6,7 @@ from settings import *
 class CanvasObject(pygame.sprite.Sprite):
     def __init__(self, pos, frames, tile_id, origin, group):
         super().__init__(group)
+        self.tile_id = tile_id
         
         #animation
         self.frames = frames

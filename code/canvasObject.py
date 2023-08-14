@@ -23,6 +23,10 @@ class CanvasObject(pygame.sprite.Sprite):
         self.selected = True
         self.mouse_offset = Vector(pygame.mouse.get_pos()) - Vector(self.rect.topleft) 
     
+    def end_drag(self, origin):
+        self.selected = False
+        self.distance_to_origin = Vector(self.rect.topleft) - origin
+    
     def drag(self):
         if self.selected:
             self.rect.topleft = Vector(pygame.mouse.get_pos()) - self.mouse_offset

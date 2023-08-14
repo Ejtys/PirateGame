@@ -37,6 +37,7 @@ class Editor:
         
         #objects
         self.canvas_objects = pygame.sprite.Group()
+        self.object_drag_active = False
         
         #player
         CanvasObject((200, WINDOW_HEIGHT/2), self.animations[0]["frames"], 0, self.origin, self.canvas_objects)
@@ -104,10 +105,11 @@ class Editor:
             self.selection_hotkeys(event)
             self.menu_click(event)
             
+            self.object_drag(event)
+            
             self.canvas_add()
             self.canvas_remove()
             
-            self.object_drag(event)
     
     def pan_input(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and mouse_buttons()[1]:
@@ -148,7 +150,7 @@ class Editor:
             self.selection_index = index if index else self.selection_index
 
     def canvas_add(self):
-        if mouse_buttons()[0] and not self.menu.rect.collidepoint(mouse_pos()):
+        if mouse_buttons()[0] and not self.menu.rect.collidepoint(mouse_pos()) and not self.object_drag_active:
             current_cell = self.get_current_cell()
             
             if current_cell != self.last_selected_cell:
@@ -177,6 +179,11 @@ class Editor:
             for sprite in self.canvas_objects:
                 if sprite.rect.collidepoint(event.pos):
                     sprite.start_drag()
+                    self.object_drag_active = True
+        if event.type == pygame.MOUSEBUTTONUP and not mouse_buttons()[0] and self.object_drag_active:
+            for sprite in self.canvas_objects:
+                sprite.end_drag(self.origin)
+                self.object_drag_active = False
 
     #draw
     def draw_tile_lines(self):

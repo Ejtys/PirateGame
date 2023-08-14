@@ -103,8 +103,11 @@ class Editor:
             self.pan_input(event)
             self.selection_hotkeys(event)
             self.menu_click(event)
+            
             self.canvas_add()
             self.canvas_remove()
+            
+            self.object_drag(event)
     
     def pan_input(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and mouse_buttons()[1]:
@@ -168,6 +171,12 @@ class Editor:
                         del self.canvas_data[current_cell]
                 
                 self.check_neighbors(current_cell)
+
+    def object_drag(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN and mouse_buttons()[0]:
+            for sprite in self.canvas_objects:
+                if sprite.rect.collidepoint(event.pos):
+                    sprite.start_drag()
 
     #draw
     def draw_tile_lines(self):

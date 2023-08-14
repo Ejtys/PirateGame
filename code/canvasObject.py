@@ -16,7 +16,17 @@ class CanvasObject(pygame.sprite.Sprite):
         
         #movement
         self.distance_to_origin = Vector(self.rect.topleft) - origin
+        self.selected = False
+        self.mouse_offset =  Vector()
         
+    def start_drag(self):
+        self.selected = True
+        self.mouse_offset = Vector(pygame.mouse.get_pos()) - Vector(self.rect.topleft) 
+    
+    def drag(self):
+        if self.selected:
+            self.rect.topleft = Vector(pygame.mouse.get_pos()) - self.mouse_offset
+    
     def animate(self, dt):
         self.frame_index += ANIMATION_SPEED * dt
         if self.frame_index >= len(self.frames):
@@ -30,6 +40,7 @@ class CanvasObject(pygame.sprite.Sprite):
         
     def update(self, dt):
         self.animate(dt)
+        self.drag()
         
     
         

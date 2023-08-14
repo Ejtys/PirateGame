@@ -42,7 +42,13 @@ class Editor:
         #player
         CanvasObject((200, WINDOW_HEIGHT/2), self.animations[0]["frames"], 0, self.origin, self.canvas_objects)
         
-        self.sky_handle = CanvasObject()
+        self.sky_handle = CanvasObject(
+            pos = (WINDOW_WIDTH/2, WINDOW_HEIGHT/2),
+            frames = [self.sky_handle_surface],
+            tile_id = 1,
+            origin = self.origin,
+            group = self.canvas_objects
+        )
   
     #support
     def get_current_cell(self):
@@ -79,7 +85,7 @@ class Editor:
     def imports(self):
         self.water_bottom = pygame.image.load("../graphics/terrain/water/water_bottom.png").convert_alpha()
         self.sky_handle_surface = pygame.image.load("../graphics/cursors/handle.png").convert_alpha()
-    
+        
         #animation
         self.animations = {}
         for key, value in EDITOR_DATA.items():
@@ -155,15 +161,24 @@ class Editor:
     def canvas_add(self):
         if mouse_buttons()[0] and not self.menu.rect.collidepoint(mouse_pos()) and not self.object_drag_active:
             current_cell = self.get_current_cell()
+            if EDITOR_DATA[self.selection_index]["type"] == "tile":
             
-            if current_cell != self.last_selected_cell:
-                if current_cell in self.canvas_data:
-                    self.canvas_data[current_cell].add_id(self.selection_index)
-                else:
-                    self.canvas_data[current_cell] = CanvasTile(self.selection_index)
+                if current_cell != self.last_selected_cell:
+                    if current_cell in self.canvas_data:
+                        self.canvas_data[current_cell].add_id(self.selection_index)
+                    else:
+                        self.canvas_data[current_cell] = CanvasTile(self.selection_index)
                 
-                self.check_neighbors(current_cell)
-                self.last_selected_cell = current_cell
+                    self.check_neighbors(current_cell)
+                    self.last_selected_cell = current_cell
+            else:
+                CanvasObject(
+                    pos=mouse_pos(),
+                    frames=self.animations[self.selection_index]["frames"],
+                    tile_id=self.selection_index,
+                    origin=self.origin,
+                    group=self.canvas_objects
+                )
 
     def canvas_remove(self):
         if mouse_buttons()[2] and not self.menu.rect.collidepoint(mouse_pos()):
